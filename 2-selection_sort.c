@@ -1,32 +1,35 @@
 #include "sort.h"
 
 /**
- * selection_sort - A function that use selection sort algorithm.
- * @array: An array to sort.
- * @size: The size of the array.
- * Return: Nothing.
+* selection_sort - sorts using the selection sort algorithm
+* @array: the array to be sorted
+* @size: size of the array
+*
+* Return: Always Void
  */
 void selection_sort(int *array, size_t size)
 {
-	int aux = 0;
-	size_t i = 0, j = 0, pos = 0;
+	size_t i, j, min;
+	int is_swap, temp;
 
-	if (array == NULL || size == 0)
-		return;
-
-	for (; i < size - 1; i++)
+	is_swap = 0;
+	for (i = 0; i < size - 1; i++)
 	{
-		pos = i;
+		is_swap = 0;
+		min = i;
 		for (j = i + 1; j < size; j++)
 		{
-			if (array[j] < array[pos])
-				pos = j;
+			if (array[j] < array[min])
+			{
+				min = j;
+				is_swap = 1;
+			}
 		}
-		if (pos != i)
+		if (is_swap)
 		{
-			aux = array[i];
-			array[i] = array[pos];
-			array[pos] = aux;
+			temp = array[i];
+			array[i] = array[min];
+			array[min] = temp;
 			print_array(array, size);
 		}
 	}

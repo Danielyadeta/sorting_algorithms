@@ -1,73 +1,50 @@
 #include "sort.h"
 
 /**
- * quick_sort - function that sorts an array of integers
- *              in ascending order using the Quick sort algorithm
- * @array: array
- * @size: array's size
- * Return: void
- */
+* quick_sort - sorts array using the quick sort algorithm
+* @array: the array
+* @size: size of the array
+*
+* Return: Always Void
+*/
 void quick_sort(int *array, size_t size)
 {
-	if (array == NULL || size < 2)
-		return;
-
-	quick_s(array, 0, size - 1, size);
+	quick_sort_main(array, 0, size - 1, size);
 }
 
 /**
- * partition - partition
- * @array: array
- * @lo: lower
- * @hi: higher
- * @size: array's size
- * Return: i
- */
-int partition(int *array, int lo, int hi, size_t size)
+* quick_sort_main - sorts array using the quick sort algorithm
+* @array: the array
+* @init: start of the array
+* @final: end of the array
+* @size: size of the array
+*
+* Return: Always Void
+*/
+void quick_sort_main(int *array, int init, int final, size_t size)
 {
-	int i = lo - 1, j = lo;
-	int pivot = array[hi], aux = 0;
+	int initial, fim, i, f, pivot, aux;
 
-	for (; j < hi; j++)
-	{
-		if (array[j] < pivot)
-		{
+	initial = init;
+	i = initial;
+	fim = final;
+	f = fim;
+	pivot = array[(i + f) / 2];
+	do {
+		while (array[i] < pivot)
 			i++;
-			if (array[i] != array[j])
-			{
-				aux = array[i];
-				array[i] = array[j];
-				array[j] = aux;
-				print_array(array, size);
-			}
+		while (array[f] > pivot)
+			f--;
+		if (i <= f)
+		{
+			aux = array[i];
+			array[i++] = array[f];
+			array[f--] = aux;
+			print_array(array, size);
 		}
-	}
-	if (array[i + 1] != array[hi])
-	{
-		aux = array[i + 1];
-		array[i + 1] = array[hi];
-		array[hi] = aux;
-		print_array(array, size);
-	}
-	return (i + 1);
-}
-
-/**
- * quick_s - quick sort
- * @array: given array
- * @lo: lower
- * @hi:higher
- * @size: array's size
- * Return: void
- */
-void quick_s(int *array, int lo, int hi, size_t size)
-{
-	int pivot;
-
-	if (lo < hi)
-	{
-		pivot = partition(array, lo, hi, size);
-		quick_s(array, lo, pivot - 1, size);
-		quick_s(array, pivot + 1, hi, size);
-	}
+	} while (i < f);
+	if (initial < f)
+		quick_sort_main(array, initial, f, size);
+	if (i < fim)
+		quick_sort_main(array, i, fim, size);
 }
