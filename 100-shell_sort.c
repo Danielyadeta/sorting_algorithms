@@ -1,64 +1,37 @@
 #include "sort.h"
 
 /**
-* shell_sort - sorts array using the shell sort algorithm
-* @array: the array
-* @size: size of the array
-*
-* Return: Always Void
-*/
+  * shell_sort - A function tat sorts an array usin shell algorithm.
+  * @array: The array to sort.
+  * @size: The length of the array.
+  * Return: Nothing.
+  */
 void shell_sort(int *array, size_t size)
 {
-	size_t i, gap;
+	unsigned int i = 0, j = 0, gap = 0;
+	int aux = 0;
 
-	gap = 1;
 	if (array == NULL || size < 2)
 		return;
 
-	while (gap < size)
-		gap = (gap * 3) + 1;
-	gap = (gap - 1) / 3;
-	while (gap > 0)
-	{
-		for (i = 0; i < size; i++)
-			shell_sort_main(array, size, gap, i);
-		gap = (gap - 1) / 3;
-		print_array(array, size);
-	}
-}
+	while (gap < size / 3)
+		gap = gap * 3 + 1;
 
-/**
-* shell_sort_main - sorts array using the shell sort algorithm
-* @array: the array
-* @size: size of the array
-* @gap: interval that subdivide the array
-* @index: initial position to sort
-*
-* Return: Always Void
-*/
-void shell_sort_main(int *array, size_t size, size_t gap, size_t index)
-{
-	size_t i, j, min;
-	int is_swapped, temp;
-
-	is_swapped = 0;
-	for (i = index; i < size; i = i + gap)
+	for (; gap > 0; gap = (gap - 1) / 3)
 	{
-		is_swapped = 0;
-		min = i;
-		for (j = i + gap; j < size; j = j + gap)
+		for (i = gap; i < size; i++)
 		{
-			if (array[j] < array[min])
+			aux = array[i];
+			for (j = i; j >= gap && array[j - gap] > aux;
+					j -= gap)
 			{
-				min = j;
-				is_swapped = 1;
+				if (array[j] != array[j - gap])
+					array[j] = array[j - gap];
 			}
+			if (array[j] != aux)
+				array[j] = aux;
+
 		}
-		if (is_swapped)
-		{
-			temp = array[i];
-			array[i] = array[min];
-			array[min] = temp;
-		}
+		print_array(array, size);
 	}
 }
