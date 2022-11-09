@@ -1,73 +1,86 @@
 #include "sort.h"
 
 /**
- * quick_sort - function that sorts an array of integers
- *              in ascending order using the Quick sort algorithm
- * @array: array
- * @size: array's size
- * Return: void
- */
-void quick_sort(int *array, size_t size)
+* cocktail_sort_list - sorts a list using the cocktail algorithm
+* @list: pointer to the list
+*
+* Return: Always Void
+*/
+void cocktail_sort_list(listint_t **list)
 {
-	if (array == NULL || size < 2)
+	listint_t *current;
+	int is_swapped;
+
+	is_swapped = 1;
+	if (!list || len_list(*list) < 2)
 		return;
 
-	quick_s(array, 0, size - 1, size);
-}
-
-/**
- * partition - partition
- * @array: array
- * @lo: lower
- * @hi: higher
- * @size: array's size
- * Return: i
- */
-int partition(int *array, int lo, int hi, size_t size)
-{
-	int i = lo - 1, j = lo;
-	int pivot = array[hi], aux = 0;
-
-	for (; j < hi; j++)
+	current = *list;
+	while (is_swapped)
 	{
-		if (array[j] < pivot)
+		for (is_swapped = 0; current->next;)
 		{
-			i++;
-			if (array[i] != array[j])
+			if (current->next->n < current->n)
 			{
-				aux = array[i];
-				array[i] = array[j];
-				array[j] = aux;
-				print_array(array, size);
+				swap_node(list, current);
+				print_list(*list);
+				is_swapped++;
 			}
+			else
+				current = current->next;
+		}
+		if (!is_swapped)
+			break;
+		for (is_swapped = 0; current->prev;)
+		{
+			if (current->prev->n > current->n)
+			{
+				swap_node(list, current->prev);
+				print_list(*list);
+				is_swapped++;
+			}
+			else
+				current = current->prev;
 		}
 	}
-	if (array[i + 1] != array[hi])
-	{
-		aux = array[i + 1];
-		array[i + 1] = array[hi];
-		array[hi] = aux;
-		print_array(array, size);
-	}
-	return (i + 1);
 }
 
 /**
- * quick_s - quick sort
- * @array: given array
- * @lo: lower
- * @hi:higher
- * @size: array's size
- * Return: void
- */
-void quick_s(int *array, int lo, int hi, size_t size)
+* swap_node - swaps two nodes in the list
+* @list: pointer to the list
+* @node: node to be swapped
+*
+* Return: Always Void
+*/
+void swap_node(listint_t **list, listint_t *node)
 {
-	int pivot;
+	node->next->prev = node->prev;
+	if (node->prev)
+		node->prev->next = node->next;
+	else
+		*list = node->next;
+	node->prev = node->next;
+	node->next = node->next->next;
+	node->prev->next = node;
+	if (node->next)
+		node->next->prev = node;
+}
 
-	if (lo < hi)
+/**
+ * len_list - returns the number of elements in a linked dlistint_t list
+ * @h: pointer to a dlistint_t list
+ *
+ * Return: the number of nodes
+ */
+size_t len_list(const listint_t *h)
+{
+	size_t count;
+
+	count = 0;
+	while (h != NULL)
 	{
-		pivot = partition(array, lo, hi, size);
-		quick_s(array, lo, pivot - 1, size);
-		quick_s(array, pivot + 1, hi, size);
+		h = h->next;
+		count++;
 	}
+	return (count);
 }
